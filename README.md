@@ -1,2 +1,2 @@
 # ImageConverters
-文档.doc,docx,ppt,pptx,pdf,xls,xlsx转图片
+doc,docx,ppt,pptx,pdf,xls,xlsx文档转图片

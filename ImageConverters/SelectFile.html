@@ -1,0 +1,142 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="/Common/JS/jquery-1.11.3.min.js"></script>
+    <script src="/Common/JS/jquery.form.min.js"></script>
+    <title>选择文件</title>
+    <script type="text/javascript">
+        $(function () {
+            $("#btnUpload").click(function () {
+                $("#msg").html("");
+                var fileName = $("#fileUpload").val();
+                if (fileName == "") {
+                    $("#msg").html("请选择文件！");
+                    return;
+                }
+                var array = fileName.split(".");
+                var fileExtension = array[array.length - 1];
+                switch (fileExtension.toLowerCase()) {
+                    case "doc":
+                    case "docx":
+                    case "pdf":
+                    case "ppt":
+                    case "pptx":
+                    case "xls":
+                    case "xlsx":
+                    case "jpg":
+                    case "jpeg":
+                    case "png":
+                    case "bmp":
+                        $("#fileForm").ajaxSubmit({
+                            type: "post",
+                            dataType: "json", //数据类型  
+                            url: "ImageConvert.ashx",
+                            beforeSubmit: function () {
+                                $("#loading").show();
+                            },
+                            success: function (data) {
+                                if (data.success) {
+                                    window.returnValue = data.images;
+                                    window.close();
+
+                                } else {
+                                    $("#msg").html("文件上传失败。" + data.msg);
+                                }
+                                $("#loading").hide();
+                            },
+                            error: function (msg) {
+                                $("#msg").html("文件上传失败");
+                                $("#loading").hide();
+                            }
+                        });
+                        break;
+                    default:
+                        $("#msg").html("您选择文件类型不支持导入！");
+                        break;
+
+                }
+            });
+            $("#btnSelect").click(function () {
+                $("#fileUpload").trigger("click");
+            });
+            $("#fileUpload").change(function () {
+                $("#txtFilePath").val($(this).val());
+            });
+        });
+    </script>
+    <style type="text/css">
+        body {
+            font: 14px Verdana, Arial, Geneva, sans-serif;
+            color: #404040;
+            background: #fff;
+        }
+        input.textbox {
+            padding: 5px;
+            color: #999;
+            height: 24px;
+            line-height: 24px;
+            border: 1px #ccc solid;
+            width: 370px;
+            margin-right: 4px;
+            margin-left:4px;
+        }
+
+        a.link {
+           
+            display: inline-block;
+            padding: 4px 16px;
+            color: #fff;
+            font: 14px "Microsoft YaHei", Verdana, Geneva, sans-serif;
+            cursor: pointer;
+            background-color: #0099ff;
+            line-height: 28px;
+            text-decoration: none;
+        }
+
+        .datagrid-mask {
+            height: 100%;
+            left: 0;
+            opacity: 0.3;
+            filter: "alpha(opacity=30)";
+            filter: alpha(opacity=30);
+            position: absolute;
+            top: 0;
+            width: 100%;
+            background: none repeat scroll 0 0 #CCCCCC;
+        }
+
+        .datagrid-mask-msg {
+            border-style: solid;
+            border-width: 2px;
+            height: 16px;
+            margin-top: -20px;
+            padding: 12px 5px 10px 30px;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            border-color: #95B8E7;
+            background: url('/style/images/loading1.gif') no-repeat scroll 5px center #FFFFFF;
+        }
+    </style>
+</head>
+<body>
+    <form id='fileForm' enctype='multipart/form-data'>
+     
+        <div style="margin-top:30px;">
+            <input type="text" id="txtFilePath" class="textbox" />
+            <a href="javascript:void(0);" class="link" id="btnSelect">浏览</a>
+            <a href="javascript:void(0);" class="link" id="btnUpload">上传</a>
+            <input type="file" name="fileUpload"  id="fileUpload" style="display:none;"/>
+        </div>
+
+        <div id="loading" style="display:none;">
+            <div class="datagrid-mask"></div>
+            <div class="datagrid-mask-msg" style="left: 50%; margin-left: -57px; padding-top: 4px">处理中，请稍候...</div>
+        </div>
+        <div id="msg" style="color:red;margin:4px;">
+
+        </div>
+    </form>
+</body>
+</html>

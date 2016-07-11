@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <script src="/Common/JS/jquery-1.11.3.js"></script>
+	<meta charset="utf-8" />
+    <script type="text/javascript">
+        $(function () {
+            $("#btnImport").click(function () {
+                var images = window.showModalDialog("selectFile.html", null, "dialogWidth=550px;dialogHeight=250px");
+                if (images!=null) {
+                    $.each(images,function (index, image) {
+                        $("#imageContent").append($("<image src='" + image + "'/>"));
+                    });
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <input type="button" id="btnImport" value="导入文件" />
+    <div id="imageContent">
+
+    </div>
+
+
+    <DIV title=插入或修改图片 class=Btn style="LEFT: 570px" YINITIALIZED="true"><IMG class=Ico src="buttonimage/standard/img.gif"></DIV>
+</body>
+</html>
